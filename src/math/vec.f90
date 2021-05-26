@@ -2,6 +2,16 @@ MODULE vec
 
     TYPE, PUBLIC :: VECTOR2
         REAL :: x, y
+    CONTAINS
+        PROCEDURE, PASS(this) :: vec2_op_add
+        PROCEDURE, PASS(this) :: vec2_op_div
+        PROCEDURE, PASS(this) :: vec2_op_mult_left
+        PROCEDURE, PASS(this) :: vec2_op_mult_right
+        PROCEDURE, PASS(this) :: vec2_op_subtract
+        GENERIC, PUBLIC :: OPERATOR(+) => vec2_op_add
+        GENERIC, PUBLIC :: OPERATOR(-) => vec2_op_subtract
+        GENERIC, PUBLIC :: OPERATOR(/) => vec2_op_div
+        GENERIC, PUBLIC :: OPERATOR(*) => vec2_op_mult_left, vec2_op_mult_right
     END TYPE VECTOR2
 
     TYPE, PUBLIC :: VECTOR3
@@ -11,23 +21,61 @@ MODULE vec
         PROCEDURE, PASS(this) :: vec3_op_div
         PROCEDURE, PASS(this) :: vec3_op_mult_left
         PROCEDURE, PASS(this) :: vec3_op_mult_right
+        PROCEDURE, PASS(this) :: vec3_op_subtract
         GENERIC, PUBLIC :: OPERATOR(+) => vec3_op_add
+        GENERIC, PUBLIC :: OPERATOR(-) => vec3_op_subtract
         GENERIC, PUBLIC :: OPERATOR(/) => vec3_op_div
-        GENERIC, PUBLIC :: OPERATOR(*) => vec3_op_mult_left
-        GENERIC, PUBLIC :: OPERATOR(*) => vec3_op_mult_right
+        GENERIC, PUBLIC :: OPERATOR(*) => vec3_op_mult_left, vec3_op_mult_right
     END TYPE VECTOR3
 
 CONTAINS
 
 ! vector2 procedures ==========================================================
 
-    FUNCTION vec2_dot(a, b)
-        TYPE(VECTOR2), INTENT(IN) :: a, b
-        REAL :: vec2_dot
+    PURE FUNCTION vec2_op_add(lhs,this)
+        TYPE(VECTOR2), INTENT(IN) :: lhs
+        CLASS(VECTOR2), INTENT(IN) :: this
+        TYPE(VECTOR2) :: vec2_op_add
 
-        vec2_dot = (a%x * b%x) + (a%y * b%y)
+        vec2_op_add = VECTOR2(lhs%x+this%x,lhs%y+this%y)
 
-    END FUNCTION vec2_dot
+    END FUNCTION vec2_op_add
+
+    PURE FUNCTION vec2_op_subtract(lhs,this)
+        TYPE(VECTOR2), INTENT(IN) :: lhs
+        CLASS(VECTOR2), INTENT(IN) :: this
+        TYPE(VECTOR2) :: vec2_op_subtract
+
+        vec2_op_subtract = VECTOR2(lhs%x-this%x,lhs%y-this%y)
+
+    END FUNCTION vec2_op_subtract
+
+    PURE FUNCTION vec2_op_div(this,rhs)
+        CLASS(VECTOR2), INTENT(IN) :: this
+        REAL, INTENT(IN) :: rhs
+        TYPE(VECTOR2) :: vec2_op_div
+
+        vec2_op_div = VECTOR2(this%x/rhs,this%y/rhs)
+
+    END FUNCTION vec2_op_div
+
+    PURE FUNCTION vec2_op_mult_left(lhs,this)
+        REAL, INTENT(IN) :: lhs
+        CLASS(VECTOR2), INTENT(IN) :: this
+        TYPE(VECTOR2) :: vec2_op_mult_left
+
+        vec2_op_mult_left = VECTOR2(lhs*this%x,lhs*this%y)
+
+    END FUNCTION vec2_op_mult_left
+
+    PURE FUNCTION vec2_op_mult_right(this,rhs)
+        CLASS(VECTOR2), INTENT(IN) :: this
+        REAL, INTENT(IN) :: rhs
+        TYPE(VECTOR2) :: vec2_op_mult_right
+
+        vec2_op_mult_right = VECTOR2(this%x*rhs,this%y*rhs)
+
+    END FUNCTION vec2_op_mult_right
 
 ! vector3 procedures ==========================================================
 
@@ -39,6 +87,15 @@ CONTAINS
         vec3_op_add = VECTOR3(lhs%x+this%x,lhs%y+this%y,lhs%z+this%z)
         
     END FUNCTION vec3_op_add
+
+    PURE FUNCTION vec3_op_subtract(lhs,this)
+        TYPE(VECTOR3), INTENT(IN) :: lhs
+        CLASS(VECTOR3), INTENT(IN) :: this
+        TYPE(VECTOR3) :: vec3_op_subtract
+
+        vec3_op_subtract = VECTOR3(lhs%x-this%x,lhs%y-this%y,lhs%z-this%z)
+
+    END FUNCTION vec3_op_subtract
 
     PURE FUNCTION vec3_op_div(this,rhs)
         CLASS(VECTOR3), INTENT(IN) :: this
@@ -66,32 +123,5 @@ CONTAINS
         vec3_op_mult_right = VECTOR3(this%x*rhs,this%y*rhs,this%z*rhs)
 
     END FUNCTION vec3_op_mult_right
-
-    FUNCTION vec3_op_dot(this,a)
-        CLASS(VECTOR3), INTENT(IN) :: this
-        TYPE(VECTOR3), INTENT(IN) :: a
-        REAL :: vec3_op_dot
-
-        vec3_op_dot = vec3_dot(this,a)
-
-    END FUNCTION vec3_op_dot
-
-    FUNCTION vec3_dot(a, b)
-        TYPE(VECTOR3), INTENT(IN) :: a, b
-        REAL :: vec3_dot
-
-        vec3_dot = (a%x * b%x) + (a%y * b%y) + (a%z * b%z)
-
-    END FUNCTION vec3_dot
-
-    FUNCTION vec3_cross(a, b)
-        TYPE(VECTOR3), INTENT(IN) :: a, b
-        TYPE(VECTOR3) :: vec3_cross
-
-        vec3_cross%x = (a%y * b%z) - (a%z * b%y)
-        vec3_cross%y = (a%z * b%x) - (a%x * b%z)
-        vec3_cross%z = (a%x * b%y) - (a%y * b%x)
-
-    END FUNCTION vec3_cross
 
 END MODULE vec
