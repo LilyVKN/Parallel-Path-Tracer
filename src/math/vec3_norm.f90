@@ -5,7 +5,7 @@ FUNCTION vec3_norm(a)
     
     REAL :: length
 
-    length = vec3_dot(a,a)
+    length = SQRT(vec3_dot(a,a))
     vec3_norm = a / length
 
 END FUNCTION

@@ -1,4 +1,5 @@
 MODULE vec
+    REAL, PARAMETER :: PI = 4.0 * ATAN(1.0)
 
     TYPE, PUBLIC :: VECTOR2
         REAL :: x, y
@@ -29,7 +30,6 @@ MODULE vec
     END TYPE VECTOR3
 
 CONTAINS
-
 ! vector2 procedures ==========================================================
 
     PURE FUNCTION vec2_op_add(lhs,this)
