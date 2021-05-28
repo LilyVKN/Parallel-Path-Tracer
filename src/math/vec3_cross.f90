@@ -1,3 +1,4 @@
+! calculates the cross product of two 2-dimensional vectors and returns a REAL
 FUNCTION vec3_cross(a, b)
     USE vec
     TYPE(VECTOR3), INTENT(IN) :: a, b

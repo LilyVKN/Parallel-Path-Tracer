@@ -1,9 +1,12 @@
+! defines 2- and 3-dimensional vector types with basic operators defined
 MODULE vec
     REAL, PARAMETER :: PI = 4.0 * ATAN(1.0)
 
+    ! 2-dimensional vector
     TYPE, PUBLIC :: VECTOR2
         REAL :: x, y
     CONTAINS
+        ! operator procedures
         PROCEDURE, PASS(this) :: vec2_op_add
         PROCEDURE, PASS(this) :: vec2_op_div
         PROCEDURE, PASS(this) :: vec2_op_mult_left
@@ -15,6 +18,7 @@ MODULE vec
         GENERIC, PUBLIC :: OPERATOR(*) => vec2_op_mult_left, vec2_op_mult_right
     END TYPE VECTOR2
 
+    ! 3-dimensional vector
     TYPE, PUBLIC :: VECTOR3
         REAL :: x, y, z
     CONTAINS
@@ -30,7 +34,8 @@ MODULE vec
     END TYPE VECTOR3
 
 CONTAINS
-! vector2 procedures ==========================================================
+
+! vector2 operators ===========================================================
 
     PURE FUNCTION vec2_op_add(lhs,this)
         TYPE(VECTOR2), INTENT(IN) :: lhs
@@ -77,7 +82,7 @@ CONTAINS
 
     END FUNCTION vec2_op_mult_right
 
-! vector3 procedures ==========================================================
+! vector3 operators ===========================================================
 
     PURE FUNCTION vec3_op_add(lhs,this)
         TYPE(VECTOR3), INTENT(IN) :: lhs

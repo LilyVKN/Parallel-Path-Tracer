@@ -1,3 +1,4 @@
+! returns the normalized 3-dimensional vector of the given vector
 FUNCTION vec3_norm(a)
     USE vec
     TYPE(VECTOR3), INTENT(IN) :: a

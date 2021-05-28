@@ -1,3 +1,4 @@
+! calculates the dot product of two 3-dimensional vectors and returns a REAL
 FUNCTION vec3_dot(a, b)
     USE vec
     TYPE(VECTOR3), INTENT(IN) :: a, b
